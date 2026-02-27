@@ -16,7 +16,6 @@ lint:
     - vendor/
   ignore_only:
     ENUM_ZERO_VALUE_SUFFIX:
-      - doirp_v3/v1/core.proto
 
 breaking:
   use:
