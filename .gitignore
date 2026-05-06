@@ -54,3 +54,5 @@ coverage/
 GEMINI.md
 AGENTS.md
 
+/bin
+vendor

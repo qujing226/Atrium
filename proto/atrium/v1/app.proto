@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package atrium.v1;
+
+import "buf/validate/validate.proto";
+
+message ChatMessage{
+  string text = 1;
+  bool is_typing = 2;
+}
+
+message AppMessage {
+  oneof payload{
+    ChatMessage chat = 1;
+  }
+}

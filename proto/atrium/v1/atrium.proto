@@ -1,0 +1,54 @@
+syntax = "proto3";
+
+package atrium.v1;
+
+import "buf/validate/validate.proto";
+import "atrium/v1/core.proto";
+import "atrium/v1/app.proto";
+
+/* =========================================================================
+ * QLink AKE Envelope
+ * ========================================================================= */
+
+message Packet {
+  Header header = 1 [(buf.validate.field).required = true]; 
+
+  oneof payload {
+    option (buf.validate.oneof).required = true;
+
+    KEMInit kem_init = 10;
+    KEMConfirm kem_confirm = 11;
+    SecureMessage secure_message = 12;
+    AppMessage app_message = 13;
+    Error error = 14;
+  }
+
+  Credential credential = 2;
+}
+
+/* =========================================================================
+ * Handshake & Secure Transport
+ * =========================================================================
+ */
+message KEMInit {
+  bytes ct        = 1 [(buf.validate.field).bytes.len = 1088]; 
+  bytes nonce     = 2 [(buf.validate.field).bytes.len = 32];
+  // 0-RTT: early data
+  SecureMessage early_data_cipher = 3;
+  AppMessage early_data = 4;
+}
+
+message KEMConfirm {
+  bytes nonce_hash = 1 [(buf.validate.field).bytes.len = 32];   
+}
+
+message SecureMessage {
+  uint64 sequence_number = 1;                                      
+  bytes  ciphertext      = 2 [(buf.validate.field).required = true]; 
+  bytes  nonce           = 3 [(buf.validate.field).bytes.len = 12];  
+  bytes  tag             = 4 [(buf.validate.field).bytes.len = 16];  
+}
+
+message Error{
+  string error = 1 [(buf.validate.field).required = true];
+}

@@ -1,0 +1,27 @@
+version: v1
+
+input:
+  - directory: .
+
+plugins:
+  - remote: buf.build/protocolbuffers/go
+    out: ../gen/go
+    opt:
+      - paths=source_relative
+  - local: protoc-gen-go-enums
+    out: ../gen/go
+    opt:
+      - paths=source_relative
+  - local: protoc-gen-go-string-consts
+    out: ../gen/go
+    opt:
+      - paths=source_relative
+
+managed:
+  enabled: true
+  disable:
+    - path: vendor
+      file_option: go_package_prefix
+  override:
+    - file_option: go_package_prefix
+      value: github.com/qujing226/atrium/gen/go

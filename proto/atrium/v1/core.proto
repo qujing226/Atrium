@@ -1,0 +1,57 @@
+syntax = "proto3";
+
+package atrium.v1;
+
+import "buf/validate/validate.proto";
+import "vendor/daotl/protoc-gen-go-enums/ext.proto";
+import "vendor/daotl/protoc-gen-go-string-consts/ext.proto";
+
+enum Code {
+  option (daotl.gen_go_enums.name_pascal_case) = true;
+  option (daotl.gen_go_enums.strip_name_prefix) = "Code_";
+  option (daotl.gen_go_string_consts.enabled) = true;
+  option (daotl.gen_go_string_consts.strip_name_prefix) = "Code_";
+  option (daotl.gen_go_string_consts.name_pascal_case) = true;
+  option (daotl.gen_go_string_consts.name_suffix) = "Str";
+  option (daotl.gen_go_string_consts.strip_value_prefix) = "CODE_";
+  option (daotl.gen_go_string_consts.value_prefix) = "CODE_";
+  CODE_UNSPECIFIED               = 0;
+  CODE_SUCCESS                   = 1;
+  CODE_ERROR_VERIFICATION_FAILED = 2;
+  CODE_ERROR_DECRYPTION_FAILED   = 3;
+  CODE_ERROR_PROTOCOL_VIOLATION  = 4;
+}
+
+enum SessionState {
+  option (daotl.gen_go_enums.name_pascal_case) = true;
+  option (daotl.gen_go_enums.strip_name_prefix) = "Session_State_";
+  option (daotl.gen_go_string_consts.enabled) = true;
+  option (daotl.gen_go_string_consts.strip_name_prefix) = "Session_State_";
+  option (daotl.gen_go_string_consts.name_pascal_case) = true;
+  option (daotl.gen_go_string_consts.name_suffix) = "Str";
+  option (daotl.gen_go_string_consts.strip_value_prefix) = "SESSION_STATE_";
+  option (daotl.gen_go_string_consts.value_prefix) = "SS_";
+  SESSION_STATE_UNSPECIFIED = 0;
+  SESSION_STATE_IDLE        = 1;
+  SESSION_STATE_SPECULATIVE = 2;
+  SESSION_STATE_VERIFIED    = 3;
+  SESSION_STATE_ABORTED     = 4;
+}
+
+// Header
+message Header {
+  SessionState session_state = 1 [(buf.validate.field).required = true];
+  Code   code    = 2 [(buf.validate.field).required = true];
+  string request_id = 3 [(buf.validate.field).string.uuid = true];
+  string from_did   = 4 [(buf.validate.field).string.pattern = "^did:[a-z0-9]+:.*$"];
+  string to_did     = 5 [(buf.validate.field).string.pattern = "^did:[a-z0-9]+:.*$"];
+  int64  timestamp  = 6 [(buf.validate.field).int64.gt = 0];
+}
+
+// Credential protects the whole message, include Header and Body.
+// During transfer, implementation should calculate Header + Body bytes's hash values,
+// which use the Post-Qutum hash algorithum ""
+// and signs with user's ed2519 private key
+message Credential {
+  string signature = 1;
+}

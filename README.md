@@ -1,6 +1,6 @@
-# QLink: Post-Quantum DID-Anchored AKE Protocol
+# Atrium: Post-Quantum DID-Anchored AKE Protocol
 
-QLink is a research-grade prototype of a decentralized, post-quantum Authenticated Key Exchange (AKE) protocol. It addresses the fundamental **"Security-Latency Paradox"** inherent in Decentralized Identity (DID) networks, achieving 0-RTT session resumption without compromising long-term cryptographic security.
+Atrium is a research-grade prototype of a decentralized, post-quantum Authenticated Key Exchange (AKE) protocol. It addresses the fundamental **"Security-Latency Paradox"** inherent in Decentralized Identity (DID) networks, achieving 0-RTT session resumption without compromising long-term cryptographic security.
 
 ## Core Innovations
 
@@ -12,10 +12,10 @@ QLink is a research-grade prototype of a decentralized, post-quantum Authenticat
 
 The theoretical foundation, formal security proofs, and protocol specifications are detailed in the following documents:
 
-*   📖 **[Protocol Specification](spec/docs/SPECIFICATION.md)**: Defines the formal state machine, normative rules, and the TCP/Protobuf envelope architecture.
-*   🧠 **[Theoretical Model & Formal Security](spec/docs/THEORETICAL_MODEL.md)**: Details the formal definition of the Speculative State ($S_{spec}$), the probabilistic consistency model $P(\Delta t)$, and the overarching security theorem.
-*   🛡️ **[Formal Security Game](spec/docs/FORMAL_SECURITY_GAME.md)**: Provides the Game-Hopping proof reducing the protocol's security to EUF-CMA and IND-CCA2 assumptions, alongside realistic network probability bounds.
-*   🌍 **[Deployment & Evaluation Plan](spec/docs/DEPLOYMENT_PLAN.md)**: Outlines the WAN topology for empirical evaluation of the 0-RTT TTFB metrics.
+*   📖 **[Protocol Specification](docs/SPECIFICATION.md)**: Defines the formal state machine, normative rules, and the TCP/Protobuf envelope architecture.
+*   🧠 **[Theoretical Model & Formal Security](docs/THEORETICAL_MODEL.md)**: Details the formal definition of the Speculative State ($S_{spec}$), the probabilistic consistency model $P(\Delta t)$, and the overarching security theorem.
+*   🛡️ **[Formal Security Game](docs/FORMAL_SECURITY_GAME.md)**: Provides the Game-Hopping proof reducing the protocol's security to EUF-CMA and IND-CCA2 assumptions, alongside realistic network probability bounds.
+*   🌍 **[Deployment & Evaluation Plan](docs/DEPLOYMENT_PLAN.md)**: Outlines the WAN topology for empirical evaluation of the 0-RTT TTFB metrics.
 
 ## Origin
 
