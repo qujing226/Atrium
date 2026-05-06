@@ -14,6 +14,7 @@ import (
 	atriumv1 "github.com/qujing226/atrium/gen/go/atrium/v1"
 	"github.com/qujing226/atrium/pkg/blockchain"
 	"github.com/qujing226/atrium/pkg/connect"
+	"github.com/qujing226/atrium/pkg/model"
 	"github.com/qujing226/atrium/pkg/secure"
 )
 
@@ -48,9 +49,10 @@ func NewClient(did string, chain *blockchain.OptimisticCache, relayAddr string) 
 	// Register self to the chain (simulation setup)
 	pk, _ := kemKp.Export()
 	signPk, _ := signKp.Export()
-	doc := make([]byte, len(signPk)+len(pk))
-	copy(doc[0:], signPk)
-	copy(doc[len(signPk):], pk)
+	doc, err := model.BuildDIDDocument(did, signPk, pk)
+	if err != nil {
+		return nil, err
+	}
 	chain.RegisterDidDoc(did, doc)
 
 	return &Client{
@@ -185,7 +187,16 @@ func (c *Client) Handshake(targetDid string) error {
 	}
 
 	// 2. Crypto Setup
-	targetKyberPk, err := secure.LoadFromBytes(doc[32:], nil) // Skip Ed25519
+	parsedDoc, err := model.ParseDIDDocument(doc)
+	if err != nil {
+		return err
+	}
+	targetKyberBytes, err := parsedDoc.GetKyberPubKey()
+	if err != nil {
+		return err
+	}
+
+	targetKyberPk, err := secure.LoadFromBytes(targetKyberBytes, nil) // Skip Ed25519
 	if err != nil {
 		return err
 	}
